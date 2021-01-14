@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Entities.Artikal>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<p>
+    <a asp-action="Create" class="btn btn-outline-primary">Dodaj artikal</a>
+</p>
+@if (!string.IsNullOrEmpty(ViewBag.Poruka))
+{
+    <p>@ViewBag.Poruka</p>
+}
+@if (Model.Count() == 0)
+{
+    <p> Jos uvek nije unet nijedan artikal!</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Naziv
+                </th>
+                <th>
+                    Aktuelna cena
+                </th>
+                <th>
+                    PDV
+                </th>
+                <th>
+                    Rabat
+                </th>
+
+               
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.artikalID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.naziv)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.aktuelnaCena)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.pdv)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rabat)
+                </td>
+              
+
+                <td>
+                    <a asp-action="Edit" asp-route-artikalID="@item.artikalID" class="btn btn-success">Izmeni </a>
+
+                    <a asp-action="Delete" asp-route-artikalID="@item.artikalID" class="btn btn-danger">Obrisi </a>
+
+                    <a asp-action="Details" asp-route-artikalID="@item.artikalID" class="btn btn-primary">Cene </a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}

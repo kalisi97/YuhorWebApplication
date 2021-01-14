@@ -1,0 +1,46 @@
+﻿@model Entities.Cena
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h3>Obrisi podatke o ceni</h3>
+<hr />
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Delete">
+
+            <input type="hidden" asp-for="datumOd" />
+
+            <div class="form-group">
+                <label class="control-label">Artikal</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <select asp-for="artikalID">
+                            <option selected value="@ViewBag.artikalID">@ViewBag.artikal</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Iznos</label>
+                <input asp-for="iznos" class="form-control" readonly="readonly" />
+            </div>
+        
+
+            <div class="form-group">
+                <input type="submit" value="Obrisi" class="btn btn-danger" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Entities.Cena>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Cene</h1>
+
+<p>
+    <a asp-action="Create" asp-route-artikalID="@Model.ElementAt(0).Artikal.artikalID" asp-controller="Cena" class="btn btn-outline-info" >Dodaj novu cenu</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Datum
+            </th>
+            <th>
+                Iznos
+            </th>
+          
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.datumOd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.iznos)
+            </td>
+            @{
+                var parms = new Dictionary<string, string>
+                                                                                                    
+                {
+                { "artikalID",item.Artikal.artikalID.ToString() },
+                { "datumOd",item.datumOd.ToString() }
+                 };
+            }
+            <td>
+                <a asp-action="Edit" asp-controller="Cena" asp-all-route-data="parms" class="btn btn-success">Izmeni </a>
+
+                <a asp-action="Delete" asp-controller="Cena" asp-all-route-data="parms" class="btn btn-danger">Obrisi </a>
+            </td>
+
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,48 @@
+﻿@model Entities.Kupac
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h3>Izmeni podatke o kupcu</h3>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="kupacID" />
+            <div class="form-group">
+                <label class="control-label">Naziv</label>
+                <input asp-for="naziv" class="form-control" />
+                <span asp-validation-for="naziv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">PIB</label>
+                <input asp-for="pib" class="form-control" />
+                <span asp-validation-for="pib" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Maticni broj</label>
+                <input asp-for="mb" class="form-control" />
+                <span asp-validation-for="mb" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Tekuci racun</label>
+                <input asp-for="tr" class="form-control" />
+                <span asp-validation-for="tr" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Sacuvaj" class="btn btn-success" />
+
+                <a asp-action="Index" class="btn btn-primary">Lista kupaca</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

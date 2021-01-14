@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Entities.StavkaReklamacije>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Stavke reklamacije</h1>
+
+<p>
+    <a asp-action="Create" asp-route-brojReklamacije="@Model.ElementAt(0).brojReklamacije" asp-controller="StavkaReklamacije" class="btn btn-outline-primary">Dodaj stavku</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Broj reklamacije
+            </th>
+            <th>
+                Redni broj
+            </th>
+            <th>
+                Kolicina
+            </th>
+            <th>
+                Razlog
+            </th>
+            <th>
+                Artikal
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.brojReklamacije)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.rb)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.kolicina)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.razlog)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Artikal.naziv)
+            </td>
+            @{
+               var parms = new Dictionary<string, string>
+
+               {
+                { "brojReklamacije",item.brojReklamacije.ToString() },
+                { "stavka",item.rb.ToString() }
+               };
+            }
+            <td>
+                <a asp-action="Edit" asp-controller="StavkaReklamacije" asp-all-route-data="parms" class="btn btn-success">Izmeni </a>
+
+                <a asp-action="Delete" asp-controller="StavkaReklamacije" asp-all-route-data="parms" class="btn btn-danger">Obrisi </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

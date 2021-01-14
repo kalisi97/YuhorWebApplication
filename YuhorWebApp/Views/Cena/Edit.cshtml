@@ -1,0 +1,43 @@
+﻿@model Entities.Cena
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h3>Izmeni podatke o ceni</h3>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="datumOd" />
+            <div class="form-group">
+                <label class="control-label">Artikal</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <select asp-for="artikalID">
+                            <option selected value="@ViewBag.artikalID">@ViewBag.artikal</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="iznos" class="control-label"></label>
+                <input asp-for="iznos" class="form-control" />
+                <span asp-validation-for="iznos" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Sacuvaj" class="btn btn-success" />
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

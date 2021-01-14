@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Entities.Kupac>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<p>
+    <a asp-action="Create" class="btn btn-outline-primary">Dodaj novog kupca</a>
+</p>
+@if(!string.IsNullOrEmpty(ViewBag.Poruka))
+{
+    <p>@ViewBag.Poruka</p>
+}
+@if (Model.Count() == 0)
+{
+    <p> Jos uvek nije unet nijedan kupac!</p>
+}
+else
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               ID
+            </th>
+            <th>
+                Naziv
+            </th>
+            <th>
+                PIB
+            </th>
+            <th>
+               Maticni broj
+            </th>
+            <th>
+               Tekuci racun
+            </th>
+         
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.kupacID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.naziv)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.pib)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mb)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.tr)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-kupacID="@item.kupacID" class="btn btn-success">Izmeni </a>
+      
+                <a asp-action="Delete" asp-route-kupacID="@item.kupacID" class="btn btn-danger">Obrisi </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+}

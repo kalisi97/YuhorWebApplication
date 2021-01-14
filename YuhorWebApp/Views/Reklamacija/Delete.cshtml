@@ -1,0 +1,51 @@
+﻿@model Entities.Reklamacija
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h3>Obrisi podatke o reklamaciji</h3>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="brojReklamacije" />
+            <div class="form-group">
+                <label class="control-label">Datum</label>
+                <input readonly="readonly" asp-for="datum" type="datetime-local" class="form-control" />
+                <span asp-validation-for="datum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Razlog</label>
+                <input readonly="readonly" asp-for="razlog" class="form-control" />
+                <span asp-validation-for="razlog" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Naziv</label>
+                <input readonly="readonly" asp-for="naziv" class="form-control" />
+                <span asp-validation-for="naziv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Ukupno</label>
+                <input readonly="readonly" asp-for="ukupno" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="cols-sm-2 control-label">Kupac</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <select readonly="readonly" disabled="disabled" asp-for="kupacID" class="form-control" asp-items="ViewBag.kupacID"></select>
+                    </div>
+                    <span asp-validation-for="kupacID"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sacuvaj" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

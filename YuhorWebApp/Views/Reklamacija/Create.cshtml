@@ -1,0 +1,194 @@
+﻿@model Entities.Reklamacija
+@using Entities
+
+
+
+
+
+<body>
+    <h4>Dodaj novu reklamaciju</h4>
+    <hr />
+    <div class="row">
+        <div>
+            <form method="post">
+                <table id="multipleCategoryTbl2" class="table">
+                    <thead class="multipleCategoryTbl-header">
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <label class="control-label">Datum</label>
+                                    <input type="datetime-local" asp-for="datum" class="form-control" id="txtDatum" />
+                                    <span asp-validation-for="datum" class="text-danger"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label class="control-label">Razlog</label>
+                                    <input asp-for="razlog" class="form-control" id="txtRazlog" />
+                                    <span asp-validation-for="razlog" class="text-danger"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label class="control-label">Naziv</label>
+                                    <input asp-for="naziv" class="form-control" id="txtNazivReklamacije" />
+                                    <span asp-validation-for="naziv" class="text-danger"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <label class="control-label">Izaberi kupca</label>
+
+                                    <select asp-for="kupacID" class="form-control" asp-items="ViewBag.kupacID" id="kupac"></select>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    </thead>
+
+
+                </table>
+            </form>
+        </div>
+    </div>
+
+
+    <h4> Unesite stavke </h4>
+
+    <div class="table-borderless" id="tbl">
+
+        <table id="multipleCategoryTbl" class="table" style="margin-top:30px">
+
+            <thead class="multipleCategoryTbl-header">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label class="control-label">Kolicina</label>
+                            <input asp-for="@Model.StavkeReklamacije.ElementAt(0).kolicina" class="form-control" id="txtKolicinaStavka" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label class="control-label">Artikal</label>
+                            <select asp-for="@Model.StavkeReklamacije.ElementAt(0).artikalID" id="artikalStavka" class="form-control" asp-items="ViewBag.artikalID"></select>
+                            <span asp-validation-for="@Model.StavkeReklamacije.ElementAt(0).artikalID" class="text-danger" />
+
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label class="control-label">Razlog</label>
+                            <input asp-for="@Model.StavkeReklamacije.ElementAt(0).razlog" class="form-control" id="txtRazlogStavka" />
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="form-group">
+                            <input type="button" id="btnAdd" value="Dodaj" class="btn btn-primary" style="margin-top:30px" />
+                        </div>
+
+                    </td>
+                </tr>
+            </thead>
+
+            <tbody class="multipleCategoryTbl-body">
+            </tbody>
+
+
+        </table>
+    </div>
+
+    <div class="form-group">
+        <input type="button" id="btnSave" value="Sacuvaj reklamaciju" class="btn btn-primary" />
+    </div>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+    <script type="text/javascript">
+
+        $("body").on("click", "#btnAdd", function () {
+
+            var kupac = $("#kupac option:selected");
+            var txtDatum = $("#txtDatum");
+            var txtRazlog = $("#txtRazlog");
+            var txtNazivReklamacije = $("#txtNazivReklamacije");
+            var artikalStavka = $("#artikalStavka option:selected");
+            var txtKolicinaStavka = $("#txtKolicinaStavka");
+            var txtRazlogStavka = $("#txtRazlogStavka");
+
+            var tBody = $("#multipleCategoryTbl > TBODY")[0];
+
+            var row = tBody.insertRow(-1);
+            var cell = $(row.insertCell(-1));
+            cell.html(txtKolicinaStavka.val());
+            var cell = $(row.insertCell(-1));
+            cell.html(artikalStavka.text());
+            var cell = $(row.insertCell(-1));
+            cell.html(txtRazlogStavka.val());
+            var cell = $(row.insertCell(-1));
+            cell.html(artikalStavka.val()).css("display", "none");
+            cell = $(row.insertCell(-1));
+            var btnRemove = $("<input />");
+            btnRemove.attr("type", "button");//css("background", "linear-gradient(to right, #6dd5ed, #2193b0)").css("border-radius", "100px").css("color", "white").css("width", "80px").css("border-color", "silver");
+            btnRemove.attr("onclick", "Remove(this);");
+            btnRemove.val("Obrisi");
+            cell.append(btnRemove);
+
+            txtKolicinaStavka.val("");
+            txtRazlogStavka.val("");
+        });
+
+        function Remove(button) {
+
+            var row = $(button).closest("TR");
+            var name = $("TD", row).eq(0).html();
+            if (confirm("Do you want to delete: " + name)) {
+
+                var table = $("#multipleCategoryTbl")[0];
+                table.deleteRow(row[0].rowIndex);
+            }
+        };
+
+        $("body").on("click", "#btnSave", function () {
+            var reklamacija = new Object();
+            var r = {};
+
+            r.datum = txtDatum.value;
+            r.razlog = txtRazlog.value;
+            r.naziv = txtNazivReklamacije.value;
+            r.kupacID = kupac.value;
+
+            reklamacija = r;
+
+            var stavke = new Array();
+           
+            $("#multipleCategoryTbl TBODY TR").each(function () {
+                var row = $(this);
+                var stavka = {};
+                stavka.kolicina = row.find("TD").eq(0).html();
+                stavka.artikalID = row.find("TD").eq(3).html();
+                stavka.razlog = row.find("TD").eq(2).html();
+                stavke.push(stavka);
+            });
+
+            reklamacija.StavkeReklamacije = stavke;
+
+            $.ajax({
+                type: "POST",
+                url: "/Reklamacija/Create",
+                data: JSON.stringify(reklamacija),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    alert(r + " record(s) inserted.");
+                    window.location.replace('/Reklamacija/Index');
+                }
+            });
+        }); 
+
+    </script>
+
+
+</body>

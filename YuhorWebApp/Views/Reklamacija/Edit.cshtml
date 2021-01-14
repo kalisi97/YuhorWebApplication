@@ -1,0 +1,54 @@
+﻿@model Entities.Reklamacija
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h3>Izmeni podatke o reklamaciji</h3>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="brojReklamacije" />
+            <div class="form-group">
+                <label class="control-label">Datum</label>
+                <input asp-for="datum" type="datetime-local" class="form-control" />
+                <span asp-validation-for="datum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Razlog</label>
+                <input asp-for="razlog" class="form-control" />
+                <span asp-validation-for="razlog" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Naziv</label>
+                <input asp-for="naziv" class="form-control" />
+                <span asp-validation-for="naziv" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Ukupno</label>
+                <input readonly="readonly" asp-for="ukupno" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="cols-sm-2 control-label">Kupac</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <select asp-for="kupacID" class="form-control" asp-items="ViewBag.kupacID"></select>
+                    </div>
+                    <span asp-validation-for="kupacID"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sacuvaj" class="btn btn-success" />
+
+                <a asp-action="Index" class="btn btn-primary">Lista reklamacija</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

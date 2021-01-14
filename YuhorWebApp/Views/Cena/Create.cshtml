@@ -1,0 +1,45 @@
+﻿@model Entities.Cena
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h3>Dodaj novu cenu</h3>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Artikal</label>
+                <div class="cols-sm-10">
+                    <div class="input-group">
+                        <select asp-for="artikalID">
+                            <option selected value="@ViewBag.artikalID">@ViewBag.artikal</option> 
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Datum</label>
+                <input asp-for="datumOd" type="datetime-local" class="form-control" />
+                <span asp-validation-for="datumOd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Iznos</label>
+                <input asp-for="iznos" class="form-control" />
+                <span asp-validation-for="iznos" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Sacuvaj" class="btn btn-success" />
+
+                <a asp-action="Details" asp-route-artikalID="@ViewBag.artikalID" asp-controller="Artikal" class="btn btn-primary">Povratak na artikal</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
