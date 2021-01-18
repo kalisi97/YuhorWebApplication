@@ -44,6 +44,7 @@ namespace YuhorWebApp.Controllers
 
                 Reklamacija reklamacija = BrokerBaze.Sesija().VratiReklamaciju(brojReklamacije);
                 BindingList<StavkaReklamacije> stavke = reklamacija.StavkeReklamacije;
+             
                 return View(stavke);
             }
             catch (Exception)
@@ -81,7 +82,8 @@ namespace YuhorWebApp.Controllers
                     razlog = r.razlog,
                     Kupac = kupac,
                     kupacID = kupac.kupacID,
-                    Status = Status.Dodat
+                    Status = Status.Dodat,
+                    brojReklamacije = BrokerBaze.Sesija().VratiSifru("brojReklamacije", "Reklamacija")
                 };
 
                 BindingList<StavkaReklamacije> stavke = new BindingList<StavkaReklamacije>();
@@ -151,24 +153,25 @@ namespace YuhorWebApp.Controllers
 
         [HttpPost]
 
+   
         public ActionResult Edit(Reklamacija reklamacija)
         {
             try
             {
-                if (ModelState.IsValid)
-                {
+                
                     Reklamacija reklamacijaIzBaze = BrokerBaze.Sesija().VratiReklamaciju(reklamacija.brojReklamacije);
+                    Kupac kupac = BrokerBaze.Sesija().VratiKupca(reklamacija.kupacID);
                     reklamacijaIzBaze.naziv = reklamacija.naziv;
                     reklamacijaIzBaze.datum = reklamacija.datum;
                     reklamacijaIzBaze.razlog = reklamacija.razlog;
                     reklamacijaIzBaze.kupacID = reklamacija.kupacID;
+                    reklamacijaIzBaze.Kupac = kupac;
                     reklamacijaIzBaze.Status = Status.Izmenjen;
                     string rezultat = BrokerBaze.Sesija().SacuvajReklamaciju(reklamacijaIzBaze);
                     if (rezultat.Equals("Uspesno!"))
                         return RedirectToAction("Index", new { poruka = "Sistem je uspesno sacuvao reklamaciju!" });
                     else throw new Exception();
-                }
-                return View(reklamacija);
+            
             }
             catch (Exception)
             {

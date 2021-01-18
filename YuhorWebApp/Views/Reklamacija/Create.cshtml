@@ -37,6 +37,13 @@
                             </td>
                             <td>
                                 <div class="form-group">
+                                    <label class="control-label">Ukupno</label>
+                                    <input asp-for="ukupno" class="form-control" id="txtUkupno" />
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
                                     <label class="control-label">Izaberi kupca</label>
 
                                     <select asp-for="kupacID" class="form-control" asp-items="ViewBag.kupacID" id="kupac"></select>
@@ -117,7 +124,7 @@
             var artikalStavka = $("#artikalStavka option:selected");
             var txtKolicinaStavka = $("#txtKolicinaStavka");
             var txtRazlogStavka = $("#txtRazlogStavka");
-
+            var txtUkupno = $("txtUkupno");
             var tBody = $("#multipleCategoryTbl > TBODY")[0];
 
             var row = tBody.insertRow(-1);
@@ -159,7 +166,7 @@
             r.razlog = txtRazlog.value;
             r.naziv = txtNazivReklamacije.value;
             r.kupacID = kupac.value;
-
+            r.ukupno = txtUkupno.value;
             reklamacija = r;
 
             var stavke = new Array();

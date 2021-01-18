@@ -78,8 +78,8 @@ namespace YuhorWebApp.Controllers
         {
             try
             {
-                if(ModelState.IsValid)
-                {
+                
+                    artikal.artikalID = BrokerBaze.Sesija().VratiSifru("artikalID", "Artikal");
                     cena.Status = Status.Dodat;
                     artikal.ListaCena.Add(cena);
                     artikal.Status = Status.Dodat;
@@ -93,10 +93,6 @@ namespace YuhorWebApp.Controllers
                         throw new Exception();
                     }
 
-                }
-              
-                    return View(artikal);
-                
 
             }
             catch (Exception)
@@ -127,8 +123,7 @@ namespace YuhorWebApp.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
-                {
+                
                     Artikal artikalIzBaze = BrokerBaze.Sesija().VratiArtikal(artikal.artikalID);
                     artikalIzBaze.naziv = artikal.naziv;
                     artikalIzBaze.pdv = artikal.pdv;
@@ -138,9 +133,9 @@ namespace YuhorWebApp.Controllers
                     if (rezultat.Equals("Uspesno!"))
                         return RedirectToAction("Index", new { poruka = "Sistem je uspesno sacuvao artikal!" });
                     else throw new Exception();
-                }
+                
 
-                return View(artikal);
+       
             }
             catch (Exception)
             {

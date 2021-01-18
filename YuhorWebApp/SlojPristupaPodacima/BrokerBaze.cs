@@ -33,7 +33,23 @@ namespace YuhorWebApp.DataAccessLayer
             return broker;
         }
 
+        public int VratiSifru(string nazivKolone, string nazivTabele)
+        {
+            try
+            {
+                konekcija.Open();
+                komanda = new SqlCommand("", konekcija, transakcija);
+                komanda.CommandText = $"Select max({nazivKolone}) from {nazivTabele}";
+                int sifra = Convert.ToInt32(komanda.ExecuteScalar());
+                return sifra + 1;
+            }
+            catch (Exception)
+            {
 
+                return 1;
+            }
+            finally { if (konekcija != null) konekcija.Close(); }
+        }
         #region Artikal
         public string SacuvajArtikal(Artikal artikal)
         {
@@ -50,9 +66,9 @@ namespace YuhorWebApp.DataAccessLayer
                     case Status.Dodat:
 
                         komanda.CommandText =
-                        $"insert into Artikal output inserted.artikalID values ('{artikal.naziv}', {artikal.pdv}, {artikal.rabat}, '{artikal.pdv}, {artikal.rabat}' , @aktuelnaCena)";
+                        $"insert into Artikal values ({artikal.artikalID},'{artikal.naziv}', {artikal.pdv}, {artikal.rabat}, '{artikal.pdv}, {artikal.rabat}' , @aktuelnaCena)";
                         komanda.Parameters.AddWithValue("aktuelnaCena", DBNull.Value);
-                        artikal.artikalID = Convert.ToInt32(komanda.ExecuteScalar());
+                        komanda.ExecuteNonQuery();
                         break;
                     case Status.Izmenjen:
                         komanda.CommandText = $"update Artikal set naziv='{artikal.naziv}', pdv={artikal.pdv}, rabat={artikal.rabat}, artikalProcenti='{artikal.pdv}, {artikal.rabat}' where artikalID={artikal.artikalID}";
@@ -314,16 +330,18 @@ namespace YuhorWebApp.DataAccessLayer
                 switch (r.Status)
                 {
                     case Status.Dodat:
-
+                      
                         komanda.CommandText =
-                       $"insert into Reklamacija output inserted.brojReklamacije values (@datum, '{r.razlog}', {r.Kupac.kupacID}, '{r.naziv}',@ukupno)";
+                       $"insert into Reklamacija values ({r.brojReklamacije},@datum, '{r.razlog}', {r.Kupac.kupacID}, @naziv,@ukupno)";
                         komanda.Parameters.Add("@datum", SqlDbType.DateTime2).Value = r.datum;
+                        komanda.Parameters.AddWithValue("@naziv", DBNull.Value);
                         komanda.Parameters.AddWithValue("ukupno", DBNull.Value);
-                        r.brojReklamacije = Convert.ToInt32(komanda.ExecuteScalar());
+                        komanda.ExecuteNonQuery();
+                    
                         break;
                     case Status.Izmenjen:
                 
-                        komanda.CommandText = $"update Reklamacija set datum=@datum, razlog='{r.razlog}', kupacID={r.Kupac.kupacID}, naziv = '{r.naziv}' where brojReklamacije={r.brojReklamacije}";
+                        komanda.CommandText = $"update Reklamacija set datum=@datum, razlog='{r.razlog}', kupacID={r.Kupac.kupacID} where brojReklamacije={r.brojReklamacije}";
                         komanda.Parameters.Add("@datum", SqlDbType.DateTime2).Value = r.datum;
                         komanda.ExecuteNonQuery();
                         break;
@@ -344,13 +362,13 @@ namespace YuhorWebApp.DataAccessLayer
                     switch (sr.Status)
                     {
                         case Status.Izmenjen:
-                            komanda1.CommandText = $"Update StavkaReklamacije set kolicina={sr.kolicina}, artikalID={sr.Artikal.artikalID}, razlog = '{sr.razlog}' where brojReklamacije={sr.brojReklamacije} and rb={sr.rb}";
+                            komanda1.CommandText = $"Update StavkaReklamacije set kolicina={sr.kolicina}, artikalID={sr.Artikal.artikalID} where brojReklamacije={sr.brojReklamacije} and rb={sr.rb}";
                             komanda1.ExecuteNonQuery();
                             break;
                         case Status.Dodat:
                            
-                            komanda1.CommandText = $"insert into StavkaReklamacije (brojReklamacije,  kolicina, artikalID, razlog) values ({r.brojReklamacije}, {sr.kolicina}, {sr.Artikal.artikalID}, '{sr.razlog}')";
-                          
+                            komanda1.CommandText = $"insert into StavkaReklamacije (brojReklamacije,  kolicina, artikalID) values ({r.brojReklamacije}, {sr.kolicina}, {sr.Artikal.artikalID})";
+            
                             komanda1.ExecuteNonQuery();
                             break;
                         case Status.Obrisan:

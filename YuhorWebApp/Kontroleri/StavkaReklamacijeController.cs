@@ -39,25 +39,24 @@ namespace YuhorWebApp.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+
+                Reklamacija reklamacija = BrokerBaze.Sesija().VratiReklamaciju(stavka.brojReklamacije);
+                Artikal artikal = BrokerBaze.Sesija().VratiArtikal(stavka.artikalID);
+                StavkaReklamacije novaStavka = new StavkaReklamacije
                 {
-                    Reklamacija reklamacija = BrokerBaze.Sesija().VratiReklamaciju(stavka.brojReklamacije);
-                    Artikal artikal = BrokerBaze.Sesija().VratiArtikal(stavka.artikalID);
-                    StavkaReklamacije novaStavka = new StavkaReklamacije
-                    {
-                        Status = Status.Dodat,
-                        kolicina = stavka.kolicina,
-                        razlog = stavka.razlog,
-                        artikalID = stavka.artikalID,
-                        Artikal = artikal
-                    };
-                    reklamacija.StavkeReklamacije.Add(novaStavka);
-                    string rezultat = BrokerBaze.Sesija().SacuvajReklamaciju(reklamacija);
-                    if (rezultat.Equals("Uspesno!"))
-                        return RedirectToAction("Details", "Reklamacija", new { brojReklamacije = reklamacija.brojReklamacije });
+                    Status = Status.Dodat,
+                    kolicina = stavka.kolicina,
+                    razlog = stavka.razlog,
+                    artikalID = stavka.artikalID,
+                    Artikal = artikal
+                };
+                reklamacija.StavkeReklamacije.Add(novaStavka);
+                string rezultat = BrokerBaze.Sesija().SacuvajReklamaciju(reklamacija);
+                if (rezultat.Equals("Uspesno!"))
+                    return RedirectToAction("Index", "Reklamacija");//, new { brojReklamacije = reklamacija.brojReklamacije });
                     else throw new Exception();
-                }
-                return View(stavka);
+                
+             
             }
             catch (Exception)
             {

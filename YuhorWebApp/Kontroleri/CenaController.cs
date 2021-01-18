@@ -86,6 +86,7 @@ namespace YuhorWebApp.Controllers
                     Cena cenaIzBaze = artikalIzBaze.ListaCena.FirstOrDefault(c => c.datumOd == cena.datumOd);
                     cenaIzBaze.iznos = cena.iznos;
                     cenaIzBaze.Status = Status.Izmenjen;
+                   
                     string rezultat = BrokerBaze.Sesija().SacuvajArtikal(artikalIzBaze);
                     if (rezultat.Equals("Uspesno!"))
                         return RedirectToAction("Details", "Artikal", new { artikalID = cena.artikalID });
